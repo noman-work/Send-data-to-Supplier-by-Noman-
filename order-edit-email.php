@@ -92,4 +92,73 @@ function send_order_data_to_dropship( $order_id){
 
     // Send the email
     send( 'new_order', $order, $supply_email, $subject, $formatted_message, $notification );
+   
 }
+
+
+/**
+ * Generating the email fields
+ */
+if( function_exists('acf_add_local_field_group') ):
+    acf_add_local_field_group(array(
+        'key' => 'group_621f7e6bb2c23',
+        'title' => 'Supply Data',
+        'fields' => array(
+            array(
+                'key' => 'field_621f7e754f289',
+                'label' => 'Supplier Message',
+                'name' => 'supplier_message',
+                'type' => 'textarea',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'placeholder' => '',
+                'maxlength' => '',
+                'rows' => '',
+                'new_lines' => 'wpautop',
+            ),
+            array(
+                'key' => 'field_621f8ff98b865',
+                'label' => 'Supplier Email Address',
+                'name' => 'supplier_email_address',
+                'type' => 'email',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'placeholder' => '',
+                'prepend' => '',
+                'append' => '',
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param' => 'post_type',
+                    'operator' => '==',
+                    'value' => 'shop_order',
+                ),
+            ),
+        ),
+        'menu_order' => 0,
+        'position' => 'side',
+        'style' => 'default',
+        'label_placement' => 'top',
+        'instruction_placement' => 'label',
+        'hide_on_screen' => '',
+        'active' => true,
+        'description' => '',
+        'show_in_rest' => 0,
+    ));    
+endif;		
