@@ -33,14 +33,30 @@ function noman_meta_box_callback()
 
     $value="send_order_data";
     echo "Add Both Supplier Message and Supplier E-mail. Hit Update you will see send data Option.";
+    
+    $send_message = get_post_meta( $post_id, 'escaped_json', true );
+    
+    if( 1 == $send_message ){
+        echo "<div style='
+        background: #2f3640;
+        color: #fff;
+        font-weight: 600;
+        padding: 6px 10px;
+        border-radius: 3px;
+        margin: 9px 0;
+    '>E-mail Already Sent!!</div>";
+    }  
 
-    if( !empty($supply_msg) && !empty($supply_email) )
+    
+    if( !empty($supply_email) )
     {
         ?>   <p><a style="" href="?post=<?php echo $post_id; ?>&action=edit&send=<?php echo $value; ?>" class="button"><?php _e('Send Order!'); ?></a></p> <?php
 
         if ( isset( $_GET['send'] ) && ! empty( $_GET['send'] ) ) {
             send_order_data_to_dropship($post_id);
-
+            $escaped_json = 1;
+            update_post_meta( $post_id, 'escaped_json', $escaped_json );
+            
             wp_redirect(get_home_url().'/wp-admin/post.php?post='.$post_id.'&action=edit'); 
         }
     }
@@ -92,9 +108,7 @@ function send_order_data_to_dropship( $order_id){
 
     // Send the email
     send( 'new_order', $order, $supply_email, $subject, $formatted_message, $notification );
-   
 }
-
 
 /**
  * Generating the email fields
