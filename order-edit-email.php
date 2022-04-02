@@ -176,3 +176,46 @@ if( function_exists('acf_add_local_field_group') ):
         'show_in_rest' => 0,
     ));    
 endif;		
+
+
+//Create Small Preview on order column so the you can see the Preview is it sent or not. 
+
+function noman_order_sent_preview( $columns ) {
+
+    $new_columns = array();
+
+    foreach ( $columns as $column_name => $column_info ) {
+
+        $new_columns[ $column_name ] = $column_info;
+
+        if ( 'order_total' === $column_name ) {
+            $new_columns['order_sent'] = __( 'Sent to Supplier', 'my-textdomain' );
+        }
+    }
+
+    return $new_columns;
+}
+add_filter( 'manage_edit-shop_order_columns', 'noman_order_sent_preview', 20 );
+
+function noman_order_sent_preview_content( $column ) {
+    global $post;
+
+    if ( 'order_sent' === $column ) {
+
+        $order    = wc_get_order( $post->ID );
+		$send_message = get_post_meta( $post->ID, 'escaped_json', true );
+    
+		if( 1 == $send_message ){
+			echo "<div style='
+			background: #2f3640;
+			color: #fff;
+			font-weight: 600;
+			padding: 6px 10px;
+			border-radius: 3px;
+			margin: 9px 0;
+		'>E-mail Already Sent!!</div>";
+		} 
+        
+    }
+}
+add_action( 'manage_shop_order_posts_custom_column', 'noman_order_sent_preview_content' );
